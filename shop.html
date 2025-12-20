@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css?v=1" rel="stylesheet">
+    <title>Products - Petit Friend</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+      <img src="logo.png" style="width:50px; height:50px; object-fit:cover; border-radius:20%;">
+        Petit Friend
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="shop.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="profile.html"><i class="bi bi-person-circle"></i> Profile</a></li>
+        <li class="nav-item">
+          <button class="btn btn-sm btn-outline-secondary ms-lg-3" id="theme-toggle">
+            <i class="bi bi-moon"></i>
+          </button>
+        </li>
+        <li class="nav-item"><a class="btn btn-sm btn-primary ms-lg-3" href="cart.html"><i class="bi bi-bag"></i> Cart <span class="cart-count badge bg-light text-dark ms-1">0</span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="container py-4">
+  <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-between mb-3">
+    <h2 class="m-0">Catalog</h2>
+    <div class="d-flex gap-2">
+      <input id="search" class="form-control" placeholder="Search by name">
+      <select id="category" class="form-select">
+        <option value="">All Categories</option>
+        <option value="dog">Dogs</option>
+        <option value="cat">Cats</option>
+        <option value="bird">Birds</option>
+        <option value="fish">Fish</option>
+      </select>
+    </div>
+  </div>
+  <div class="row g-3" id="product-grid"></div>
+</section>
+
+<div class="modal fade" id="quickView" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div class="row g-0">
+          <div class="col-md-6"><img id="qv-img" class="img-fluid w-100 h-100 object-fit-cover"></div>
+          <div class="col-md-6 p-3">
+            <h5 id="qv-title"></h5>
+            <div id="qv-price" class="text-primary fw-bold mb-2"></div>
+            <p id="qv-desc" class="small"></p>
+            <div class="d-flex align-items-center gap-2">
+              <input id="qv-qty" type="number" min="1" value="1" class="form-control" style="width:100px">
+              <button id="qv-add" class="btn btn-primary">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast align-items-center text-bg-success position-fixed bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex"><div class="toast-body"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
+</div>
+
+<footer class="mt-5 border-top py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <div class="small text-muted">© 2025 Petit Friend · All rights reserved</div>
+      <div class="d-flex gap-3 small"><a href="about.html" class="link-secondary">About</a><a href="shop.html" class="link-secondary">Catalog</a><a href="contact.html" class="link-secondary">Support</a></div>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

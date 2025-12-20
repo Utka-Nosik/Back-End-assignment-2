@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": 2,
+      "name": "Cat Scratching Post",
+      "price": 25,
+      "category": "Accessories",
+      "description": "Save your sofa from claws"
+    },
+    {
+      "id": 3,
+      "name": "Hamster",
+      "price": 15,
+      "category": "Pets",
+      "description": "Small, fast and cute"
+    },
+    {
+      "id": 4,
+      "name": "Rubber Ball",
+      "price": 5,
+      "category": "Toys",
+      "description": "Indestructible toy for fetching"
+    },
+    {
+      "id": 5,
+      "name": "Parrot Food",
+      "price": 12,
+      "category": "Food",
+      "description": "Tasty seeds for birds"
+    }
+  ]
+}
