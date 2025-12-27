@@ -1,66 +1,93 @@
-# Pet Shop API Project 🐾
+# 🌈 Elmore Weather Channel (Backend API Assignment)
 
-This is a backend project for a Pet Shop application using Node.js and Express. It allows users to view, add, update, and delete items from the shop inventory stored in a JSON file.
+A creative weather application inspired by "The Amazing World of Gumball". This project demonstrates backend API integration, server-side data processing, and a responsive UI.
 
-## Project Structure
-- `server.js`: The main server entry point.
-- `data.json`: A JSON file acting as a database for items.
-- `package.json`: List of dependencies (Express, etc.).
-- `public/`: Folder for static files (HTML, CSS, JS).
+![Screenshot of the App](./Back%20end%20assign%202%20screen.png)
 
-## How to Install Dependencies
-1. Clone the repository or download the files.
-2. Open the terminal in the project directory.
-3. Run the following command to install Express and other modules:
+## 🚀 Objective
+The goal was to build a server-side application that fetches data from multiple APIs, aggregates it, and serves it to the client. The frontend does not communicate with the weather providers directly; all logic is handled by the Node.js backend to ensure architecture cleanliness and security.
 
-```bash
-npm install
-```
+---
 
-## How to Run the Server
+## 🛠 Setup Instructions
 
-```bash
-node .\first_serv.js
-```
+### Prerequisites
+- Node.js installed
+- NPM (Node Package Manager)
 
-The server will start running at: http://localhost:3000
+### Installation
 
-## List of API Routes
+1. Clone the repository:
+   ```bash
+   git clone <your-repo-link>
+   ```
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| **GET** | `/items` | Get list of all items |
-| **POST** | `/items` | Create a new item |
-| **PUT** | `/items/:id` | Update an existing item by ID |
-| **DELETE** | `/items/:id` | Delete an item by ID |
-| **GET** | `/time` | Get current server time |
-| **GET** | `/status` | Check server status (200 OK) |
+2. Navigate to the project directory:
+   ```bash
+   cd project-folder
+   ```
 
-## Example Requests (for Postman / Thunder Client)
+3. Install dependencies (Express, Axios, etc.):
+   ```bash
+   npm install
+   ```
 
-### 1. Create a New Item (POST)
-**URL:** `http://localhost:3000/items`
+4. Start the server:
+   ```bash
+   node server.js
+   ```
 
-**Body (JSON):**
+5. Open your browser and go to:
+   http://localhost:3000/weather.html
+
+## 📡 API Usage Details
+
+The application uses a custom Backend API (`/weather`) that acts as a gateway to external services.
+
+### Internal Endpoint
+**GET** `/weather?city={cityName}`
+
+*   **Description:** Fetches weather and detailed country facts for the specified city.
+*   **Example:** `http://localhost:3000/weather?city=Astana`
+
+**Response Format (JSON):**
 ```json
 {
-  "name": "Premium Cat Food",
-  "price": 25,
-  "category": "Food",
-  "description": "Healthy food for adult cats"
+  "weather": {
+    "temperature": 15.5,
+    "description": "broken clouds",
+    "feels_like": 14.2,
+    "wind_speed": 3.6,
+    "country_code": "GB",
+    "rain_volume": 0
+  },
+  "country_facts": {
+    "currency": "British pound",
+    "currency_symbol": "£",
+    "population": 67215293,
+    "flag": "https://flagcdn.com/w320/gb.png",
+    "capital": "London",
+    "region": "Europe"
+  }
 }
 ```
 
-### 2. Update an Item (PUT)
-**URL:** `http://localhost:3000/items/1`
+### External APIs Integrated (Server-Side)
+- **OpenWeatherMap API:** Used to retrieve real-time weather data (Temperature, Wind, Icon, Coordinates).
+- **REST Countries API:** Used as the *Extra API*. It takes the `country_code` from the weather data (e.g., "KZ") and fetches the country's population, currency, flag, and language.
+- **Open-Meteo Geocoding API:** Used on the frontend for the Autocomplete feature (helps users find city names).
 
-**Body (JSON):**
-```json
-{
-  "price": 30,
-  "description": "Updated price for holiday sale"
-}
-```
+## 🎨 Key Design Decisions
 
-### 3. Delete an Item (DELETE)
-**URL:** `http://localhost:3000/items/1`
+### 1. Backend Architecture (Server-Side Fetching)
+Instead of fetching weather data directly from the browser, the frontend calls my own server.
+*   **Why?** This hides the API Keys from the user (Security) and allows me to process/combine data from multiple sources (Weather + Country Info) into a single, clean JSON response.
+
+### 2. UI/UX Design ("The Amazing World of Gumball")
+*   **Style:** Mixed media aesthetic. I used a realistic photo background combined with "hand-drawn" UI elements to mimic the cartoon's unique visual style.
+*   **Responsiveness:** The layout adapts to mobile screens.
+*   **Autocomplete:** To improve user experience, I added a dropdown suggestion list so users don't have to guess city spellings.
+*   **Interactive Elements:** A "Gumball" character sticker follows the user while scrolling using `position: fixed` and CSS animations.
+
+### 3. Error Handling
+The backend includes `try-catch` blocks. If the Country API fails, the Weather API will still return data, ensuring the app doesn't crash completely.
