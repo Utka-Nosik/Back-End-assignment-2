@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { json } = require('body-parser');
 const express = require('express');
 const fs = require('fs');
@@ -6,6 +7,26 @@ app.use(express.json());
 const axios = require('axios'); 
 
 app.use(express.static('assets')); 
+
+const mongoose = require('mongoose');
+const mongoURI = process.env.MONGO_URI; 
+
+mongoose.connect(mongoURI)
+    .then(() => console.log('MongoDB Connected...'))
+    .catch(err => console.log('MongoDB connection error:', err));
+
+const itemSchema = new mongoose.Schema({
+    name: { type: String, required: true },       
+    price: { type: Number, required: true },    
+    category: { type: String, required: true },   
+    description: { type: String, default: "" },
+    img: { type: String, default: "https://via.placeholder.com/300" } 
+}, { timestamps: true });
+
+const Item = mongoose.model('Item', itemSchema);
+
+
+
 
 app.get('/index.html', (request, response) => {
     response.sendFile(__dirname + '/index.html');
@@ -43,7 +64,64 @@ app.get('/about.html', (request, response) => {
     response.sendFile(__dirname + '/about.html');
 })
 
+app.post('/api/v2/items', async (req, res) => {
+    try {
+        const newItem = new Item({
+            name: req.body.name,
+            price: req.body.price,
+            category: req.body.category,
+            description: req.body.description,
+            img: req.body.img 
+        });
+        const savedItem = await newItem.save();
+        res.status(201).json(savedItem); 
+    } catch (err) {
+        res.status(400).json({ message: "Validation Error", error: err.message });
+    }
+});
 
+app.get('/api/v2/items', async (req, res) => {
+    try {
+        const items = await Item.find();
+        res.json(items);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+app.get('/api/v2/items/:id', async (req, res) => {
+    try {
+        const item = await Item.findById(req.params.id);
+        if (!item) return res.status(404).json({ message: "Not Found" });
+        res.json(item);
+    } catch (err) {
+        res.status(500).json({ message: "Invalid ID Format" });
+    }
+});
+
+app.put('/api/v2/items/:id', async (req, res) => {
+    try {
+        const updatedItem = await Item.findByIdAndUpdate(
+            req.params.id, 
+            req.body, 
+            { new: true, runValidators: true } 
+        );
+        if (!updatedItem) return res.status(404).json({ message: "Not Found" });
+        res.json(updatedItem);
+    } catch (err) {
+        res.status(400).json({ message: "Update Failed", error: err.message });
+    }
+});
+
+app.delete('/api/v2/items/:id', async (req, res) => {
+    try {
+        const deletedItem = await Item.findByIdAndDelete(req.params.id);
+        if (!deletedItem) return res.status(404).json({ message: "Not Found" });
+        res.json({ message: "Item deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 app.get('/hello', (request, response) => { 
     response.json({message: "Hello from SERVEEEEEEEER<3"});
@@ -143,7 +221,7 @@ app.delete('/items/:id', (req, res) => {
 
 app.get('/weather', async (req, res) => {
     const city = req.query.city; 
-    const apiKey = '5f764c98cec648822301320198aae8ef'; 
+    const apiKey = process.env.WEATHER_API_KEY;
 
     if (!city) {
         return res.status(400).json({ error: "City name is required" });

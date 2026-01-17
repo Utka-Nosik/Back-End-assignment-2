@@ -48,7 +48,7 @@ The application uses a custom Backend API (`/weather`) that acts as a gateway to
 **GET** `/weather?city={cityName}`
 
 *   **Description:** Fetches weather and detailed country facts for the specified city.
-*   **Example:** `http://localhost:3000/weather?city=Astana`
+*   **Example:** `http://localhost:3000/weather?city=London`
 
 **Response Format (JSON):**
 ```json
