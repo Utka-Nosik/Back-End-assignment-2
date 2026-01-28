@@ -1,93 +1,118 @@
-# 🌈 Elmore Weather Channel (Backend API Assignment)
+# 🐾 Petit Friend - Pet Shop API
 
-A creative weather application inspired by "The Amazing World of Gumball". This project demonstrates backend API integration, server-side data processing, and a responsive UI.
+A full-stack web application for a Pet Shop built with **Node.js, Express, and MongoDB**. 
+The project implements a **secure MVC architecture** with Role-Based Access Control (RBAC).
 
-![Screenshot of the App](./Back%20end%20assign%202%20screen.png)
+## 🚀 Features
 
-## 🚀 Objective
-The goal was to build a server-side application that fetches data from multiple APIs, aggregates it, and serves it to the client. The frontend does not communicate with the weather providers directly; all logic is handled by the Node.js backend to ensure architecture cleanliness and security.
+### 1. MVC Architecture
+The project is refactored from a single-file structure into a professional modular pattern:
+- **Models:** Mongoose schemas (`User`, `Item`, `Category`).
+- **Views:** Frontend pages (`index.html`, `shop.html`, `admin.html`, etc.).
+- **Controllers:** Business logic separated from routing.
+- **Routes:** API endpoints definitions.
+- **Middleware:** JWT Authentication and Admin Authorization.
+
+### 2. Two Related Objects (CRUD)
+The system manages two core connected entities:
+- **Primary Object: Items** (Products like Dog Food, Toys).
+- **Secondary Object: Categories** (Dogs, Cats, Birds).
+*Each item belongs to a specific category.*
+
+### 3. Security & RBAC
+- **Authentication:** Users receive a **JWT (JSON Web Token)** upon login.
+- **Password Hashing:** Passwords are hashed using **bcryptjs** before storage.
+- **Authorization:**
+  - **Public:** Everyone can view products (GET requests).
+  - **User:** Can manage their profile.
+  - **Admin:** Can CREATE, UPDATE, and DELETE products/categories via the **Admin Panel**.
 
 ---
 
-## 🛠 Setup Instructions
+## 🛠️ Tech Stack
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (Mongoose)
+- **Frontend:** HTML5, Bootstrap 5, jQuery
+- **Security:** JWT, Bcryptjs, Dotenv
 
-### Prerequisites
-- Node.js installed
-- NPM (Node Package Manager)
+---
 
-### Installation
+## ⚙️ Installation & Setup
 
-1. Clone the repository:
-   ```bash
-   git clone <your-repo-link>
-   ```
+### 1. Clone the repository
+~~~bash
+git clone <your-repo-link>
+cd <folder-name>
+~~~
 
-2. Navigate to the project directory:
-   ```bash
-   cd project-folder
-   ```
+### 2. Install dependencies
+~~~bash
+npm install
+~~~
 
-3. Install dependencies (Express, Axios, etc.):
-   ```bash
-   npm install
-   ```
+### 3. Setup Environment Variables
+Create a `.env` file in the root directory and add:
+~~~env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_key
+PORT=3000
+WEATHER_API_KEY=your_openweather_key
+~~~
 
-4. Start the server:
-   ```bash
-   node server.js
-   ```
+### 4. Run the server
+~~~bash
+node app.js
+# or
+nodemon app.js
+~~~
 
-5. Open your browser and go to:
-   http://localhost:3000/weather.html
+### 5. Open in Browser
+Go to `http://localhost:3000`
 
-## 📡 API Usage Details
+---
 
-The application uses a custom Backend API (`/weather`) that acts as a gateway to external services.
+## 🔑 User Roles & Testing
 
-### Internal Endpoint
-**GET** `/weather?city={cityName}`
+You can register a new user via the Profile page or use Postman.
 
-*   **Description:** Fetches weather and detailed country facts for the specified city.
-*   **Example:** `http://localhost:3000/weather?city=London`
+### 1. Regular User
+- Can browse the catalog.
+- Can register/login.
+- Can edit personal profile info.
+- **Cannot** access the Admin Panel.
 
-**Response Format (JSON):**
-```json
-{
-  "weather": {
-    "temperature": 15.5,
-    "description": "broken clouds",
-    "feels_like": 14.2,
-    "wind_speed": 3.6,
-    "country_code": "GB",
-    "rain_volume": 0
-  },
-  "country_facts": {
-    "currency": "British pound",
-    "currency_symbol": "£",
-    "population": 67215293,
-    "flag": "https://flagcdn.com/w320/gb.png",
-    "capital": "London",
-    "region": "Europe"
-  }
-}
-```
+### 2. Admin User
+- Has full access to the Admin Dashboard (`/admin.html`).
+- Can Add/Edit/Delete Categories.
+- Can Add/Edit/Delete Products.
 
-### External APIs Integrated (Server-Side)
-- **OpenWeatherMap API:** Used to retrieve real-time weather data (Temperature, Wind, Icon, Coordinates).
-- **REST Countries API:** Used as the *Extra API*. It takes the `country_code` from the weather data (e.g., "KZ") and fetches the country's population, currency, flag, and language.
-- **Open-Meteo Geocoding API:** Used on the frontend for the Autocomplete feature (helps users find city names).
+> **How to create an Admin?**  
+> Register a user via Postman with `"role": "admin"` in the JSON body, or manually change the role in MongoDB Atlas.
 
-## 🎨 Key Design Decisions
+---
 
-### 1. Backend Architecture (Server-Side Fetching)
-Instead of fetching weather data directly from the browser, the frontend calls my own server.
-*   **Why?** This hides the API Keys from the user (Security) and allows me to process/combine data from multiple sources (Weather + Country Info) into a single, clean JSON response.
+## 📂 Project Structure
 
-### 2. UI/UX Design ("The Amazing World of Gumball")
-*   **Style:** Mixed media aesthetic. I used a realistic photo background combined with "hand-drawn" UI elements to mimic the cartoon's unique visual style.
-*   **Responsiveness:** The layout adapts to mobile screens.
-*   **Autocomplete:** To improve user experience, I added a dropdown suggestion list so users don't have to guess city spellings.
-*   **Interactive Elements:** A "Gumball" character sticker follows the user while scrolling using `position: fixed` and CSS animations.
+~~~text
+/project-root
+  ├── /controllers     # Logic for Auth, Items, Categories
+  ├── /middleware      # Auth & Role verification checks
+  ├── /models          # Database Schemas
+  ├── /routes          # API Endpoints
+  ├── /assets          # CSS, Images, Frontend JS
+  ├── app.js           # Main server entry point
+  └── *.html           # Frontend Views
+~~~
 
-### 3. Error Handling
-The backend includes `try-catch` blocks. If the Country API fails, the Weather API will still return data, ensuring the app doesn't crash completely.
+---
+
+## 📝 API Endpoints
+
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| **POST** | `/api/auth/register` | Register new user | Public |
+| **POST** | `/api/auth/login` | Login & get Token | Public |
+| **GET** | `/api/v2/items` | Get all products | Public |
+| **POST** | `/api/v2/items` | Add new product | **Admin** |
+| **PUT** | `/api/v2/items/:id` | Update product | **Admin** |
+| **DELETE** | `/api/v2/items/:id` | Delete product | **Admin** |
